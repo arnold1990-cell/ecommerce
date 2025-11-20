@@ -21,7 +21,6 @@ public interface TransactionMapper {
     @Mapping(source = "userId", target = "user.id")
     @Mapping(source = "orderId", target = "order.id")
     Transaction toEntity(TransactionDto transactionDto);
-
 }
 
 
