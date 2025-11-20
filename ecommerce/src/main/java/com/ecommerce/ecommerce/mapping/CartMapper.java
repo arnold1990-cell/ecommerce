@@ -8,18 +8,30 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import java.util.List;
 
-@Mapper(componentModel = "spring",uses = {CartItem.class})
+@Mapper(componentModel = "spring", uses = {CartItemMapper.class})
 public interface CartMapper {
 
-    @Mapping(source = "user.id",target = "userId")
-        CartDto toDto(Cart cart);
-    @Mapping(source = "userId",target = "user.id")
-        Cart toEntity(CartDto cartDto);
+    // Converts Cart entity → CartDto
+    // Maps the nested User object's ID (cart.user.id) to a simple userId field on the DTO
+    // CartItemMapper is used automatically to convert the list of CartItems within the Cart
+    @Mapping(source = "user.id", target = "userId")
+    CartDto toDto(Cart cart);
 
-        List<CartItemDto> toDtoList(List<CartItem> cartItems);
+    // Converts CartDto → Cart entity
+    // Maps the DTO's userId back into the nested User object (cart.user.id)
+    // CartItemMapper is used automatically to convert the list of CartItemDtos back into CartItems
+    @Mapping(source = "userId", target = "user.id")
+    Cart toEntity(CartDto cartDto);
 
-        List<CartItem> toEntityList(List<CartItemDto> cartItemDto);
+    // Converts a list of CartItem entities → CartItemDto objects
+    // Useful for returning multiple cart items to the frontend
+    List<CartItemDto> toDtoList(List<CartItem> cartItems);
 
-    }
+    // Converts a list of CartItemDto objects → CartItem entities
+    // Useful for saving/updating multiple cart items from frontend input
+    List<CartItem> toEntityList(List<CartItemDto> cartItemDto);
+
+}
+
 
 

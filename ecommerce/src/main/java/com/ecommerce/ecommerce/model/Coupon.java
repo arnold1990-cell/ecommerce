@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 /**
  * Coupon Entity - Discount codes for orders
- *
  * Allows admin to create promotional discount codes
  */
 @Entity

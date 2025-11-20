@@ -7,18 +7,28 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring",uses = {Category.class})
+@Mapper(componentModel = "spring", uses = {CategoryMapper.class})
 public interface CategoryMapper {
 
-    @Mapping(target = "parentCategoryId",source = "parentCategory.id")
-        CategoryDto toDto(Category category);
-    @Mapping(target = "parentCategory.id",source = "parentCategoryId")
-        Category toEntity(CategoryDto categoryDto);
+    // Converts Category entity → CategoryDto
+    // Maps the nested parentCategory object's ID (category.parentCategory.id) to a simple parentCategoryId field on the DTO
+    // Useful for sending category data to the frontend without exposing the full parentCategory entity
+    @Mapping(target = "parentCategoryId", source = "parentCategory.id")
+    CategoryDto toDto(Category category);
 
-        List<CategoryDto> toDtoList(List<Category> categories);
+    // Converts CategoryDto → Category entity
+    // Maps the DTO's parentCategoryId back into the nested parentCategory object (category.parentCategory.id)
+    // Allows reconstruction of the parent-child relationship when persisting or updating categories
+    @Mapping(target = "parentCategory.id", source = "parentCategoryId")
+    Category toEntity(CategoryDto categoryDto);
 
-        List<Category> toEntityList(List<CategoryDto> categoryDto);
+    // Converts a list of Category entities → CategoryDto objects
+    List<CategoryDto> toDtoList(List<Category> categories);
 
-    }
+    // Converts a list of CategoryDto objects → Category entities
+    List<Category> toEntityList(List<CategoryDto> categoryDto);
+
+}
+
 
 

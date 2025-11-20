@@ -7,9 +7,13 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface AnalyticsMapper {
 
-        AnalyticsDto toDto(Analytics analytics);
+    // Converts Analytics entity → AnalyticsDto
+    // Useful for sending data to the frontend without exposing the full entity
+    AnalyticsDto toDto(Analytics analytics);
 
-      Analytics   toEntity( AnalyticsDto analyticsDto);
-
+    // Converts AnalyticsDto → Analytics entity
+    // Useful for persisting or updating data received from the frontend
+    Analytics toEntity(AnalyticsDto analyticsDto);
 
 }
+
