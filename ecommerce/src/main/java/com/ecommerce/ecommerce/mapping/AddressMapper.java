@@ -5,6 +5,8 @@ import com.ecommerce.ecommerce.model.Address;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface AddressMapper {
 
@@ -19,6 +21,7 @@ public interface AddressMapper {
     @Mapping(source = "userId", target = "user.id")
     Address toEntity(AddressDto addressDto);
 
+    List<AddressDto> toDtoList(List<Address> addresses);
 }
 
 
