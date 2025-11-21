@@ -61,38 +61,35 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        // Prefix role with "ROLE_" for Spring Security
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override
     public String getUsername() {
-        return email;   // email is your login field
+        return email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;    // you are not using expiring accounts
+        // Use isActive to check if account is not expired
+        return isActive;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return isActive; // locked if deactivated
+        // Only active and verified users are not locked
+        return isActive && isVerified;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true; // password never expires
+        return isActive;
     }
 
     @Override
     public boolean isEnabled() {
-        return isVerified && isActive; // better control
+        // Only verified users are enabled
+        return isVerified;
     }
 }
-
-/*
- * Author: Arnold Madamombe
- * Date: 12-Nov-2025
- * Project: E-commerce Spring Boot App
- * Description: User entity for the e-commerce application
- */
