@@ -11,6 +11,7 @@ import java.util.List;
 /**
  * Notification Controller - Exposes API endpoints for user notifications.
  */
+@SuppressWarnings("unused")
 @RestController
 @RequestMapping("/api/notifications")
 @RequiredArgsConstructor

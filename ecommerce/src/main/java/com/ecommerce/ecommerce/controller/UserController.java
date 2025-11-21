@@ -12,6 +12,7 @@ import java.util.List;
  * UserController - Exposes REST API endpoints for managing users.
  * This layer communicates with UserService and sends results to the client.
  */
+@SuppressWarnings("unused")
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor

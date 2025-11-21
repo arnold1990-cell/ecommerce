@@ -13,6 +13,7 @@ import java.util.List;
  * Coupon Controller - Exposes REST endpoints for managing coupons.
  * Uses entity directly (no DTOs).
  */
+@SuppressWarnings("unused")
 @RestController
 @RequestMapping("/api/coupons")
 @RequiredArgsConstructor
