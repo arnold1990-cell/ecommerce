@@ -1,11 +1,19 @@
 package com.ecommerce.ecommerce.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+/**
+ * DTO for authentication requests (login)
+ */
 @Data
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class AuthenticationRequest {
+
     private String email;
     private String password;
 }

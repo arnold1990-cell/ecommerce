@@ -46,16 +46,16 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private boolean isVerified = false;
 
+    @Column(nullable = false)
+    private boolean isActive = true;
+
+    private String profileImage;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    @Column(nullable = false)
-    private boolean isActive = true;
-
-    private String profileImage;
 
     /** -------------- Spring Security Methods -------------- */
 
@@ -72,13 +72,11 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        // Use isActive to check if account is not expired
         return isActive;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        // Only active and verified users are not locked
         return isActive && isVerified;
     }
 
@@ -89,7 +87,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        // Only verified users are enabled
         return isVerified;
     }
 }

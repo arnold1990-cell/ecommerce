@@ -1,4 +1,4 @@
-package com.ecommerce.ecommerce.dto;
+package com.ecommerce.ecommerce.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * DTO for returning authentication tokens (JWT)
+ * DTO for sending authentication responses (JWT access and refresh tokens)
  */
 @Data
 @Builder
