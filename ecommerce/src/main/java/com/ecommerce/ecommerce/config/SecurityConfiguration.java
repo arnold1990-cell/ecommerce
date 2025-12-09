@@ -29,7 +29,7 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 
-    // ✅ Define LogoutHandler bean
+    //  Define LogoutHandler bean
     @Bean
     public LogoutHandler logoutHandler() {
         return new SecurityContextLogoutHandler();
