@@ -4,6 +4,7 @@ import com.ecommerce.ecommerce.model.Notification;
 import com.ecommerce.ecommerce.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class NotificationController {
     /**
      * Create a new notification
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Notification> createNotification(@RequestBody Notification notification) {
         return ResponseEntity.ok(notificationService.createNotification(notification));
@@ -30,6 +32,7 @@ public class NotificationController {
     /**
      * Get a notification by ID
      */
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public ResponseEntity<Notification> getById(@PathVariable Long id) {
         return ResponseEntity.ok(notificationService.getNotificationById(id));
@@ -38,6 +41,7 @@ public class NotificationController {
     /**
      * Get all notifications for a user
      */
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Notification>> getUserNotifications(@PathVariable Long userId) {
         return ResponseEntity.ok(notificationService.getUserNotifications(userId));
@@ -46,6 +50,7 @@ public class NotificationController {
     /**
      * Mark a notification as read
      */
+    @PreAuthorize("isAuthenticated()")
     @PatchMapping("/{id}/read")
     public ResponseEntity<Notification> markAsRead(@PathVariable Long id) {
         return ResponseEntity.ok(notificationService.markAsRead(id));
@@ -54,6 +59,7 @@ public class NotificationController {
     /**
      * Mark all notifications as read for a user
      */
+    @PreAuthorize("isAuthenticated()")
     @PatchMapping("/user/{userId}/read-all")
     public ResponseEntity<String> markAllAsRead(@PathVariable Long userId) {
         notificationService.markAllAsRead(userId);
@@ -63,6 +69,7 @@ public class NotificationController {
     /**
      * Count unread notifications
      */
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/user/{userId}/count-unread")
     public ResponseEntity<Long> countUnread(@PathVariable Long userId) {
         return ResponseEntity.ok(notificationService.countUnread(userId));
@@ -71,6 +78,7 @@ public class NotificationController {
     /**
      * Delete notification
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         notificationService.deleteNotification(id);

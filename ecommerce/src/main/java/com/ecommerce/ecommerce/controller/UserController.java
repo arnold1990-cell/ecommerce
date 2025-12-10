@@ -19,18 +19,21 @@ public class UserController {
 
     /** ----------------- User CRUD ----------------- */
 
+    // Create user (ADMIN ONLY)
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.createUser(user));
     }
 
+    // Get all users (ADMIN ONLY)
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
+    // Get user by ID (ADMIN or self)
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or #id == principal.id")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
@@ -39,12 +42,14 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Update user (ADMIN or self)
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or #id == principal.id")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         return ResponseEntity.ok(userService.updateUser(id, userDetails));
     }
 
+    // Delete user (ADMIN ONLY)
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
@@ -54,12 +59,14 @@ public class UserController {
 
     /** ----------------- Verification / Activation ----------------- */
 
+    // Verify user (ADMIN ONLY)
     @PutMapping("/{id}/verify")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> verifyUser(@PathVariable Long id) {
         return ResponseEntity.ok(userService.verifyUser(id));
     }
 
+    // Activate / Deactivate user (ADMIN ONLY)
     @PutMapping("/{id}/activate")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> setUserActiveStatus(@PathVariable Long id, @RequestParam boolean status) {
@@ -68,6 +75,7 @@ public class UserController {
 
     /** ----------------- Find by Email ----------------- */
 
+    // Find user by email (ADMIN ONLY)
     @GetMapping("/find")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> findByEmail(@RequestParam String email) {
@@ -78,6 +86,7 @@ public class UserController {
 
     /** ----------------- Password Management ----------------- */
 
+    // Change password (USER or ADMIN)
     @PatchMapping("/password")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Void> changePassword(
@@ -92,6 +101,7 @@ public class UserController {
 
     /** ----------------- User Profile ----------------- */
 
+    // Get own profile (USER or ADMIN)
     @GetMapping("/profile")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<String> getProfile() {

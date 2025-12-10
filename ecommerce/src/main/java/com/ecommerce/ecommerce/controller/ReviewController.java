@@ -4,9 +4,11 @@ import com.ecommerce.ecommerce.model.Review;
 import com.ecommerce.ecommerce.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @SuppressWarnings("unused")
 @RestController
 @RequestMapping("/api/reviews")
@@ -15,7 +17,8 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    // Add a review
+    // Add a review (Authenticated users)
+    @PreAuthorize("isAuthenticated()")
     @PostMapping
     public ResponseEntity<Review> addReview(
             @RequestParam Long productId,
@@ -26,19 +29,20 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.addReview(productId, userId, rating, comment));
     }
 
-    // Get reviews for a product
+    // Get reviews for a product (Public)
     @GetMapping("/product/{productId}")
     public ResponseEntity<List<Review>> getByProduct(@PathVariable Long productId) {
         return ResponseEntity.ok(reviewService.getReviewsByProduct(productId));
     }
 
-    // Get reviews by a user
+    // Get reviews by a user (Public)
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Review>> getByUser(@PathVariable Long userId) {
         return ResponseEntity.ok(reviewService.getReviewsByUser(userId));
     }
 
-    // Update review
+    // Update review (Authenticated users)
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/{id}")
     public ResponseEntity<Review> updateReview(
             @PathVariable Long id,
@@ -48,7 +52,8 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.updateReview(id, rating, comment));
     }
 
-    // Delete review
+    // Delete review (ADMIN ONLY)
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteReview(@PathVariable Long id) {
         reviewService.deleteReview(id);

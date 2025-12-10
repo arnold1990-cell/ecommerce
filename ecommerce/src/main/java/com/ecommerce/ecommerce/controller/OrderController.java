@@ -6,9 +6,11 @@ import com.ecommerce.ecommerce.model.Order;
 import com.ecommerce.ecommerce.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @SuppressWarnings("unused")
 @RestController
 @RequestMapping("/api/orders")
@@ -20,6 +22,7 @@ public class OrderController {
     /**
      * Create order
      */
+    @PreAuthorize("isAuthenticated()")
     @PostMapping
     public ResponseEntity<Order> create(@RequestBody Order order) {
         return ResponseEntity.ok(orderService.createOrder(order));
@@ -28,6 +31,7 @@ public class OrderController {
     /**
      * Get order by ID
      */
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public ResponseEntity<Order> getById(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.getOrderById(id));
@@ -36,22 +40,25 @@ public class OrderController {
     /**
      * Get all orders for a specific user
      */
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Order>> getUserOrders(@PathVariable Long userId) {
         return ResponseEntity.ok(orderService.getOrdersByUser(userId));
     }
 
     /**
-     * Get all orders (admin)
+     * Get all orders (ADMIN ONLY)
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<Order>> getAllOrders() {
         return ResponseEntity.ok(orderService.getAllOrders());
     }
 
     /**
-     * Update order status
+     * Update order status (ADMIN ONLY)
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}/status")
     public ResponseEntity<Order> updateStatus(
             @PathVariable Long id,
@@ -61,8 +68,9 @@ public class OrderController {
     }
 
     /**
-     * Update payment status
+     * Update payment status (ADMIN ONLY)
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}/payment")
     public ResponseEntity<Order> updatePayment(
             @PathVariable Long id,
@@ -72,8 +80,9 @@ public class OrderController {
     }
 
     /**
-     * Add or update tracking number
+     * Add or update tracking number (ADMIN ONLY)
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}/tracking")
     public ResponseEntity<Order> updateTracking(
             @PathVariable Long id,
@@ -83,8 +92,9 @@ public class OrderController {
     }
 
     /**
-     * Delete an order
+     * Delete an order (ADMIN ONLY)
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         orderService.deleteOrder(id);

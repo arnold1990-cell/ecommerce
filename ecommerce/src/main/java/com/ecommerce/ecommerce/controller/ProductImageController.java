@@ -4,9 +4,11 @@ import com.ecommerce.ecommerce.model.ProductImage;
 import com.ecommerce.ecommerce.service.ProductImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @SuppressWarnings("unused")
 @RestController
 @RequestMapping("/api/product-images")
@@ -15,7 +17,8 @@ public class ProductImageController {
 
     private final ProductImageService productImageService;
 
-    // Add a new image to a product
+    // Add a new image to a product (ADMIN ONLY)
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ProductImage> addImage(
             @RequestParam Long productId,
@@ -24,13 +27,14 @@ public class ProductImageController {
         return ResponseEntity.ok(productImageService.addImage(productId, imageUrl));
     }
 
-    // Get all images for a product
+    // Get all images for a product (PUBLIC)
     @GetMapping("/product/{productId}")
     public ResponseEntity<List<ProductImage>> getByProduct(@PathVariable Long productId) {
         return ResponseEntity.ok(productImageService.getImagesByProduct(productId));
     }
 
-    // Update an image
+    // Update an image (ADMIN ONLY)
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ProductImage> updateImage(
             @PathVariable Long id,
@@ -39,7 +43,8 @@ public class ProductImageController {
         return ResponseEntity.ok(productImageService.updateImage(id, imageUrl));
     }
 
-    // Delete an image
+    // Delete an image (ADMIN ONLY)
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteImage(@PathVariable Long id) {
         productImageService.deleteImage(id);

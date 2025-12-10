@@ -4,9 +4,11 @@ import com.ecommerce.ecommerce.model.CartItem;
 import com.ecommerce.ecommerce.service.CartItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @SuppressWarnings("unused")
 @RestController
 @RequestMapping("/api/cart-items")
@@ -18,13 +20,8 @@ public class CartItemController {
     /**
      * ADD product to cart
      * POST: /api/cart-items
-     * Request body:
-     * {
-     *   "cartId": 1,
-     *   "productId": 2,
-     *   "quantity": 3
-     * }
      */
+    @PreAuthorize("isAuthenticated()")
     @PostMapping
     public ResponseEntity<CartItem> addProductToCart(
             @RequestParam Long cartId,
@@ -37,8 +34,9 @@ public class CartItemController {
 
     /**
      * UPDATE quantity of a cart item
-     * PUT: /api/cart-items/{cartItemId}?quantity=5
+     * PUT: /api/cart-items/{cartItemId}
      */
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/{cartItemId}")
     public ResponseEntity<CartItem> updateCartItemQuantity(
             @PathVariable Long cartItemId,
@@ -50,8 +48,8 @@ public class CartItemController {
 
     /**
      * REMOVE cart item
-     * DELETE: /api/cart-items/{cartItemId}
      */
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{cartItemId}")
     public ResponseEntity<Void> removeCartItem(@PathVariable Long cartItemId) {
         cartItemService.removeCartItem(cartItemId);
@@ -60,8 +58,8 @@ public class CartItemController {
 
     /**
      * GET all items in a cart
-     * GET: /api/cart-items/cart/{cartId}
      */
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/cart/{cartId}")
     public ResponseEntity<List<CartItem>> getCartItems(@PathVariable Long cartId) {
         List<CartItem> items = cartItemService.getCartItems(cartId);
@@ -70,8 +68,8 @@ public class CartItemController {
 
     /**
      * GET a single cart item by ID
-     * GET: /api/cart-items/{cartItemId}
      */
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{cartItemId}")
     public ResponseEntity<CartItem> getCartItemById(@PathVariable Long cartItemId) {
         CartItem cartItem = cartItemService.getCartItemById(cartItemId);
@@ -80,8 +78,8 @@ public class CartItemController {
 
     /**
      * CLEAR all items in a cart
-     * DELETE: /api/cart-items/cart/{cartId}/clear
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/cart/{cartId}/clear")
     public ResponseEntity<Void> clearCart(@PathVariable Long cartId) {
         cartItemService.clearCart(cartId);

@@ -4,9 +4,11 @@ import com.ecommerce.ecommerce.model.Product;
 import com.ecommerce.ecommerce.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @SuppressWarnings("unused")
 @RestController
 @RequestMapping("/api/products")
@@ -15,7 +17,8 @@ public class ProductController {
 
     private final ProductService productService;
 
-    // Create product
+    // Create product (ADMIN ONLY)
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Product> create(
             @RequestBody Product product,
@@ -27,19 +30,20 @@ public class ProductController {
         );
     }
 
-    // Get single product
+    // Get single product (PUBLIC)
     @GetMapping("/{id}")
     public ResponseEntity<Product> get(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getProduct(id));
     }
 
-    // Get all products
+    // Get all products (PUBLIC)
     @GetMapping
     public ResponseEntity<List<Product>> getAll() {
         return ResponseEntity.ok(productService.getAllProducts());
     }
 
-    // Update product
+    // Update product (ADMIN ONLY)
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Product> update(
             @PathVariable Long id,
@@ -48,7 +52,8 @@ public class ProductController {
         return ResponseEntity.ok(productService.updateProduct(id, product));
     }
 
-    // Update stock only
+    // Update stock only (ADMIN ONLY)
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/stock")
     public ResponseEntity<Product> updateStock(
             @PathVariable Long id,
@@ -57,7 +62,8 @@ public class ProductController {
         return ResponseEntity.ok(productService.updateStock(id, stock));
     }
 
-    // Activate / Deactivate product
+    // Activate / Deactivate product (ADMIN ONLY)
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/status")
     public ResponseEntity<Product> changeStatus(
             @PathVariable Long id,
@@ -66,7 +72,8 @@ public class ProductController {
         return ResponseEntity.ok(productService.changeActiveStatus(id, active));
     }
 
-    // Delete product
+    // Delete product (ADMIN ONLY)
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         productService.deleteProduct(id);
